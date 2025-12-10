@@ -39,7 +39,9 @@ target_include_directories(unit_tests PRIVATE ${CMAKE_SOURCE_DIR})
 target_link_libraries(unit_tests PRIVATE math_operations Threads::Threads)
 
 # Ensure GTest targets are available (will be provided by FetchContent if not found)
-find_package(GTest REQUIRED)
+if (NOT TARGET GTest::gtest)
+    find_package(GTest REQUIRED)
+endif()
 
 target_link_libraries(unit_tests PRIVATE
     math_operations
