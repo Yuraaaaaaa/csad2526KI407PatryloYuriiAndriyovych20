@@ -1,0 +1,2 @@
+C:\msys64\ucrt64\bin\ar.exe qc libmath_operations.a CMakeFiles/math_operations.dir/math_operations.cpp.obj
+C:\msys64\ucrt64\bin\ranlib.exe libmath_operations.a

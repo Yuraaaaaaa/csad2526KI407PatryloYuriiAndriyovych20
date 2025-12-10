@@ -1,0 +1,3 @@
+C:/Users/User/Desktop/APKS/csad2526KI407PatryloYuriiAndriyovych20/build/_deps/googletest-subbuild/CMakeFiles/googletest-populate.dir
+C:/Users/User/Desktop/APKS/csad2526KI407PatryloYuriiAndriyovych20/build/_deps/googletest-subbuild/CMakeFiles/edit_cache.dir
+C:/Users/User/Desktop/APKS/csad2526KI407PatryloYuriiAndriyovych20/build/_deps/googletest-subbuild/CMakeFiles/rebuild_cache.dir
