@@ -1,0 +1,79 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - '*develop*'
+      - '*master*'
+  pull_request:
+    branches:
+      - '*develop*'
+      - '*master*'
+
+jobs:
+  cross_build:
+    name: Cross-platform build and test
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Ensure CMake (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          if ! command -v cmake >/dev/null 2>&1; then
+            sudo apt-get update
+            sudo apt-get install -y cmake
+          else
+            echo "cmake found: $(cmake --version | head -n1)"
+          fi
+        shell: bash
+
+      - name: Ensure CMake (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          if ! command -v cmake >/dev/null 2>&1; then
+            brew update
+            brew install cmake
+          else
+            cmake --version
+          fi
+        shell: bash
+
+      - name: Ensure CMake (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          where cmake || choco install cmake --installargs "ADD_CMAKE_TO_PATH=System" -y
+        shell: cmd
+
+      - name: Make scripts executable and run CI (Linux/macOS)
+        if: runner.os != 'Windows'
+        run: |
+          chmod +x ci.sh
+          ./ci.sh
+        shell: bash
+
+      - name: Run CI (Windows)
+        if: runner.os == 'Windows'
+        run: .\ci.bat
+        shell: cmd
+
+      - name: Success message (Linux/macOS)
+        if: success() && runner.os != 'Windows'
+        run: echo "✅ Build succeeded"
+        shell: bash
+
+      - name: Success message (Windows)
+        if: success() && runner.os == 'Windows'
+        run: echo ✅ Build succeeded
+        shell: cmd
+
+      - name: Upload build artifacts
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-output-${{ matrix.os }}
+          path: build
