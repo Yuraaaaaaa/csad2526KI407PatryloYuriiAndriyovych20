@@ -7,7 +7,13 @@ set -uo pipefail
 
 BUILD_DIR="build"
 
-echo "[ci] Ensuring build directory exists: $BUILD_DIR"
+echo "[ci] Cleaning existing build directory (if any): $BUILD_DIR"
+# Remove any existing build directory to ensure a clean build (avoids leftover absolute paths)
+if [ -d "$BUILD_DIR" ]; then
+    rm -rf "$BUILD_DIR" || { echo "[ci] Failed to remove directory $BUILD_DIR"; exit 1; }
+fi
+
+echo "[ci] Creating build directory: $BUILD_DIR"
 mkdir -p "$BUILD_DIR" || { echo "[ci] Failed to create directory $BUILD_DIR"; exit 1; }
 
 echo "[ci] Entering $BUILD_DIR"
